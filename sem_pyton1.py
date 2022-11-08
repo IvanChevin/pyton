@@ -58,8 +58,10 @@
 # else:
 #     print('no')
 
-# x = [i for i in range(10)] # задать список от 1 до 10
-# print(x)
+x = [i for i in range(10)] # задать список от 1 до 10
+print(x)
+a=[int(i) for i in input().split(' ')]
+print(a)
 
 
 
