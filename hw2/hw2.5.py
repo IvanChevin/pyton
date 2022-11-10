@@ -10,13 +10,15 @@
 n = list(map(int, input().split()))
 temp = 0
 for i in range(len(n)):
-    if i % 2 == 0:
+    if i % 2 == 0 and i != 0:
         temp = n[i]
         n[i] = n[i - 1]
         n[i - 1] = temp
+        # n[i-1], n[i] = n[i], n[i-1]
     elif i % 2 != 0 and i + 1 < len(n):
         temp = n[i]
         n[i] = n[i + 1]
         n[i + 1] = temp
-    #print(n)
+        # n[i], n[i+1] = n[i+1], n[i]
+    print(n)
 print(*n)
