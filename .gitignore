@@ -397,5 +397,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-file_encode.txt
-file_decode.txt
