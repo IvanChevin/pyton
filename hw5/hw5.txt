@@ -1,0 +1,202 @@
+# Напишите программу, удаляющую из текста все слова, содержащие ""абв"".
+
+text_str = 'абв парампампам абвегд прампампам'
+text_list = text_str.split()
+for i in range(len(text_list)-2):
+    if 'абв' in text_list[i]:
+        if not text_list[i].isidentifier():
+            text_list[i] = text_list[i][-1]
+        # del text_list[i]
+        else:
+            text_list[i] = ''
+print(*text_list)
+
+# Создайте программу для игры с конфетами человек против человека.
+
+# Условие задачи: На столе лежит 2021 конфета. Играют два игрока делая ход друг после друга.
+# Первый ход определяется жеребьёвкой. За один ход можно забрать не более чем 28 конфет.
+# Все конфеты оппонента достаются сделавшему последний ход.
+# Сколько конфет нужно взять первому игроку, чтобы забрать все конфеты у своего конкурента?
+
+# a) Добавьте игру против бота
+
+# b) Подумайте как наделить бота ""интеллектом""
+
+import random
+
+def pvp():
+  candies_on_table = 2021
+  candies_for_step = 28
+  count = 0
+  while candies_on_table > 0:
+    if count == 0:
+      step = int(input('Ходит Игрок 1. Введи количество конфет: '))
+      if step > candies_for_step or step > candies_on_table:
+        step = int(input('Слишком много! Возьми меньше: '))
+      candies_on_table = candies_on_table - step
+    if candies_on_table > 0:
+      print(f'на столе еще {candies_on_table} конфет!')
+      count = 1
+    else:
+      print('Конфеты закончились! Победил Игрок 1!')
+
+    if count == 1:
+      step = int(input('Ходит Игрок 2. Введи количество конфет: '))
+      if step > candies_for_step or step > candies_on_table:
+        step = int(input('Слишком много! Возьми меньше: '))
+      candies_on_table -= step
+    if candies_on_table > 0:
+      print(f'на столе еще {candies_on_table} конфет!')
+      count = 0
+    else:
+      print('Конфеты закончились! Победил Игрок 2!')
+  
+def pve():
+  candies_on_table = 2021
+  candies_for_step = 28
+  players = ['Игрок','Компьютер']
+  mover = random.randint(-1, 0)
+  print(f'Первым ходит {players[mover+1]}!')
+
+  while candies_on_table > 0:
+    mover += 1
+
+    if players[mover % 2] == 'Компьютер':
+      if candies_on_table < 29:
+        step = candies_on_table
+      else:
+        step = candies_on_table % (candies_for_step + 1)
+        if step == 0:
+          step = random.randint(1, candies_for_step)
+        # delenie = candies_on_table // candies_for_step
+        # step = candies_on_table - (delenie * candies_for_step + 1)
+      print(f'Компьютер забирает {step} конфет')
+
+    else:
+      step = 0
+      while step < 1 or step > 28:
+        step = int(input('Введи количество конфет: '))
+        if step > candies_for_step or step > candies_on_table:
+          step = int(input('Слишком много! Возьми меньше: '))
+        if step == 0:
+          step = int(input('Ты должен взять хотябы одну конфетку: '))
+        
+    candies_on_table = candies_on_table - step
+    if candies_on_table > 0:
+      print(f'на столе еще {candies_on_table} конфет!')
+    else:
+      print(f'Конфеты закончились! Победил {players[mover % 2]}!')
+  
+print("""1. Игрок против игорока
+2. Игрок против компьютера""")
+mode = 0
+while mode != 1 or mode != 2:
+  if mode == 1:
+    print(pvp())
+    exit()
+  elif mode == 2:
+    print(pve())
+    exit()
+  else:
+    mode = int(input('Введите 1 или 2 чтобы выбрать режим: '))
+
+board = list(range(1,10))
+
+def design_board(board):
+    print('-'*12)
+    for i in range(3):
+        print('|', board[0+i*3],'|', board[1+i*3], '|', board[2+i*3], '|')
+        print('-'*12)
+
+# design_board(board)
+
+def choice(X_or_0):
+    valid = False
+    while not valid:
+        player_index = input('Выберите ячейку ' + X_or_0 + ' --> ')
+        try:
+            player_index =int(player_index)
+        except:
+            print('Что то не то нажали')
+            continue
+        if player_index >= 1 and player_index <= 9:
+            if(str(board[player_index-1]) not in 'XO'):
+                board[player_index-1] = X_or_0
+                valid = True
+            else:
+                print('Занято')
+        else:
+            print('Еще раз попробуй')
+
+def victory_check(board):
+    victory = ((0,1,2),(3,4,5),(6,7,8),
+               (0,3,6),(1,4,7),(2,5,8),
+               (0,4,8),(2,4,6))
+    for i in victory:
+        if board[i[0]] == board[i[1]] == board[i[2]]:
+            return board[i[0]]
+    return False
+
+def game(board):
+    counter =0
+    vic = False
+    while not vic:
+        design_board(board)
+        if counter % 2 == 0:
+            choice('X')
+        else:
+            choice('0')
+        counter +=1
+        if counter > 4:
+            tt_win = victory_check(board)
+            if tt_win:
+                print(tt_win,'Победа')
+                vic = True
+                break
+            if counter == 9:
+                print('Победила, ДРУЖБА)')
+        design_board(board)
+game(board)
+
+text = input()
+with open('file_encode.txt', 'w') as data:
+    data.write(text)
+
+with open('file_encode.txt', 'r') as data:
+    string = data.readline()
+
+def rle_encode(decoded_string):
+    encoded_string = ''
+    count = 1
+    char = decoded_string[0]
+    for i in range(1, len(decoded_string)):
+        if decoded_string[i] == char:
+            count += 1
+        else:
+            encoded_string = encoded_string + str(count) + char
+            char = decoded_string[i]
+            count = 1
+            encoded_string = encoded_string + str(count) + char
+    return encoded_string
+
+
+def rle_decode(encoded_string):
+    decoded_string = ''
+    char_amount = ''
+    for i in range(len(encoded_string)):
+        if encoded_string[i].isdigit():
+            char_amount += encoded_string[i]
+        else:
+            decoded_string += encoded_string[i] * int(char_amount)
+        char_amount = ''
+    print(decoded_string)
+
+    return decoded_string
+
+
+with open('file_encode.txt', 'r') as file:
+    decoded_string = file.read()
+
+with open('file_decode.txt', 'w') as file:
+    encoded_string = rle_encode(decoded_string)
+    file.write(encoded_string)
