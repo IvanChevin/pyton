@@ -1,3 +1,7 @@
+text = input()
+with open('file_encode.txt', 'w') as data:
+    data.write(text)
+
 with open('file_encode.txt', 'r') as data:
     string = data.readline()
 
